@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font Configuration */
+body {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Admin Layout Styles */
+.admin-card-total {
+  background-color: #0070A4;
+}
+
+.admin-card-reserve {
+  background-color: #00A58B;
+}
+
+.admin-card-cancel {
+  background-color: #F96464;
+}

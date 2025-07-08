@@ -1,0 +1,103 @@
+{
+  "info": {
+    "_postman_id": "free-concert-ticket-booking-collection",
+    "name": "Free Concert Ticket Booking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Concerts",
+      "item": [
+        {
+          "name": "Create Concert",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Concert Name\",\n  \"description\": \"Description\",\n  \"seat\": 100\n}"
+            },
+            "url": { "raw": "http://localhost:3000/concerts", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["concerts"] }
+          }
+        },
+        {
+          "name": "Get All Concerts",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/concerts", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["concerts"] }
+          }
+        },
+        {
+          "name": "Get Concert By ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/concerts/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["concerts", "1"] }
+          }
+        },
+        {
+          "name": "Update Concert",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"description\": \"Updated Description\",\n  \"seat\": 200\n}"
+            },
+            "url": { "raw": "http://localhost:3000/concerts/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["concerts", "1"] }
+          }
+        },
+        {
+          "name": "Delete Concert",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:3000/concerts/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["concerts", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Reserve Seat",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"concertId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:3000/reservations", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["reservations"] }
+          }
+        },
+        {
+          "name": "Cancel Reservation",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "http://localhost:3000/reservations/1/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["reservations", "1", "1"] }
+          }
+        },
+        {
+          "name": "User Reservation History",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/reservations/user/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["reservations", "user", "1"] }
+          }
+        },
+        {
+          "name": "All Reservation History (Admin)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:3000/reservations/admin/all", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["reservations", "admin", "all"] }
+          }
+        }
+      ]
+    }
+  ]
+} 
