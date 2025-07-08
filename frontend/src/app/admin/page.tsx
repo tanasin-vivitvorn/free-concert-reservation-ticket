@@ -70,38 +70,42 @@ export default function AdminPage() {
     }
   };
 
-  const fetchConcerts = () => {
-    setLoading(true);
-    fetch("/api/concerts")
-      .then((res) => res.json())
-      .then(setConcerts)
-      .catch(() => setError("โหลดข้อมูลไม่สำเร็จ"))
-      .finally(() => setLoading(false));
+  const fetchConcerts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const concertsData = await concertService.getAllConcerts();
+      setConcerts(concertsData);
+    } catch (err) {
+      console.error('Fetch Error:', err);
+      setError("โหลดข้อมูลไม่สำเร็จ");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = () => {
-      setLoading(true);
-      fetch(`/api/concerts/${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error();
-          setError(null);
-          fetchConcerts();
-          setModal({
-            isOpen: true,
-            title: 'สำเร็จ',
-            message: 'ลบคอนเสิร์ตสำเร็จ',
-            type: 'success',
-          });
-        })
-        .catch(() => {
-          setError("ลบไม่สำเร็จ");
-        })
-        .finally(() => {
-          setLoading(false);
+    const confirmDelete = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        await concertService.deleteConcert(id);
+        
+        fetchConcerts();
+        setModal({
+          isOpen: true,
+          title: 'สำเร็จ',
+          message: 'ลบคอนเสิร์ตสำเร็จ',
+          type: 'success',
         });
+      } catch (err) {
+        console.error('Delete Error:', err);
+        const errorMessage = err instanceof Error ? err.message : 'ลบไม่สำเร็จ';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
     };
     
     setModal({
