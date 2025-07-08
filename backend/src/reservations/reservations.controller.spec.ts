@@ -12,6 +12,7 @@ describe('ReservationsController', () => {
     cancel: jest.fn(),
     userHistory: jest.fn(),
     allHistory: jest.fn(),
+    getStats: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -173,5 +174,20 @@ describe('ReservationsController', () => {
 
     expect(reservationsService.allHistory).toHaveBeenCalled();
     expect(result).toEqual(mockReservations);
+  });
+
+  it('should get stats', async () => {
+    const mockStats = {
+      totalSeats: 1000,
+      reserved: 500,
+      cancelled: 50,
+    };
+
+    mockReservationsService.getStats.mockResolvedValue(mockStats);
+
+    const result = await controller.getStats();
+
+    expect(reservationsService.getStats).toHaveBeenCalled();
+    expect(result).toEqual(mockStats);
   });
 });

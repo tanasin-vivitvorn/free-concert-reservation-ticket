@@ -22,9 +22,12 @@ describe('ReservationsService', () => {
   const mockConcertRepository = {
     findOneBy: jest.fn(),
     save: jest.fn(),
+    createQueryBuilder: jest.fn(),
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+    
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ReservationsService,
@@ -299,5 +302,49 @@ describe('ReservationsService', () => {
       },
     });
     expect(result).toBe(expectedCount);
+  });
+
+  it('should get stats successfully', async () => {
+    const mockStats = {
+      totalSeats: 1000,
+      reserved: 500,
+      cancelled: 50,
+    };
+
+    mockReservationRepo.count
+      .mockResolvedValueOnce(550) // totalReservations
+      .mockResolvedValueOnce(500) // activeReservations
+      .mockResolvedValueOnce(50); // canceledReservations
+
+    mockConcertRepo.createQueryBuilder.mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      getRawOne: jest.fn().mockResolvedValue({ total: '1000' }),
+    });
+
+    const result = await service.getStats();
+
+    expect(mockReservationRepo.count).toHaveBeenCalledTimes(3);
+    expect(mockConcertRepo.createQueryBuilder).toHaveBeenCalledWith('concert');
+    expect(result).toEqual(mockStats);
+  });
+
+  it('should get stats with zero total seats when no concerts', async () => {
+    mockReservationRepo.count
+      .mockResolvedValueOnce(0) // totalReservations
+      .mockResolvedValueOnce(0) // activeReservations
+      .mockResolvedValueOnce(0); // canceledReservations
+
+    mockConcertRepo.createQueryBuilder.mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      getRawOne: jest.fn().mockResolvedValue(null),
+    });
+
+    const result = await service.getStats();
+
+    expect(result).toEqual({
+      totalSeats: 0,
+      reserved: 0,
+      cancelled: 0,
+    });
   });
 });
